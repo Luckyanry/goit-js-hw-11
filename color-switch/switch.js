@@ -18,24 +18,70 @@ const refs = {
 
 const colors = ["#FFFFFF", "#2196F3", "#4CAF50", "#FF9800", "#009688", "#795548"];
 
-refs.start.addEventListener("click", changeStart);
+const colorChanger = {
+  intervalId: null,
+  clickIsActive: false,
 
-const randomizer = () => {
-  const randomIntegerFromInterval = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
+  start() {
+    if (this.clickIsActive) {
+      return;
+    }
+    this.clickIsActive = true;
 
-  let randomIndex = randomIntegerFromInterval(0, colors.length - 1);
+    this.intervalId = setInterval(() => {
+      this.randomizer();
+    }, 1000);
+  },
 
-  refs.body.style.backgroundColor = `${colors[randomIndex]}`;
+  stop() {
+    this.clickIsActive = false;
+    clearInterval(this.intervalId);
+  },
+
+  randomizer() {
+    const randomIntegerFromInterval = (min, max) => {
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    };
+
+    const randomIndex = randomIntegerFromInterval(0, colors.length - 1);
+
+    refs.body.style.backgroundColor = `${colors[randomIndex]}`;
+  },
 };
 
-function changeStart() {
-  const intervalId = setInterval(randomizer, 1000);
+refs.start.addEventListener("click", colorChanger.start.bind(colorChanger));
+refs.stop.addEventListener("click", colorChanger.stop.bind(colorChanger));
 
-  refs.stop.addEventListener("click", changeStop);
+//
+//
 
-  function changeStop() {
-    clearInterval(intervalId);
-  }
-}
+// ======================================================================
+// let intervalId;
+// let clickIsActive = false;
+
+// const changeStart = () => {
+//   if (clickIsActive) {
+//     return;
+//   }
+
+//   clickIsActive = true;
+//   intervalId = setInterval(randomizer, 1000);
+// };
+
+// const changeStop = () => {
+//   clickIsActive = false;
+//   clearInterval(intervalId);
+// };
+
+// refs.start.addEventListener("click", changeStart);
+// refs.stop.addEventListener("click", changeStop);
+
+// const randomizer = () => {
+//   const randomIntegerFromInterval = (min, max) => {
+//     return Math.floor(Math.random() * (max - min + 1) + min);
+//   };
+
+//   let randomIndex = randomIntegerFromInterval(0, colors.length - 1);
+
+//   refs.body.style.backgroundColor = `${colors[randomIndex]}`;
+// };
