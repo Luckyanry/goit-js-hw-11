@@ -8,16 +8,16 @@ const randomIntegerFromInterval = (min, max) => {
 };
 
 const makeTransaction = (transaction) => {
-  const promise = new Promise((resolve, reject) => {
-    const delay = randomIntegerFromInterval(200, 500);
-    console.log("delay", delay);
+  const delay = randomIntegerFromInterval(200, 500);
 
-    setTimeout(() => (Math.random() > 0.3 ? resolve(transaction.id, delay) : reject(transaction.id)), delay);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      Math.random() > 0.3 ? resolve([transaction.id, delay]) : reject(transaction.id);
+    }, delay);
   });
-  return promise;
 };
 
-const logSuccess = (id, time) => console.log(`Transaction ${id} processed in ${time}ms`);
+const logSuccess = ([id, time]) => console.log(`Transaction ${id} processed in ${time}ms`);
 
 const logError = (id) => console.warn(`Error processing transaction ${id}. Please try again later.`);
 
